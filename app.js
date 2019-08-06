@@ -12,7 +12,7 @@ GAME RULES:
 ///======================== my code starts here ==============================///
 
 /// declared my variables here
-let scores, roundScore, activePlayer, dice, gamePlaying;
+let scores, roundScore, activePlayer, dice, gamePlaying, lastDice;
 
 initialize();
 
@@ -30,14 +30,23 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
     diceDom.src = `dice-${dice}.png`;
 
     // 3. update the round score if the number was NOT 1
-    if (dice !== 1){
+    // also if you roll a 6 twice your global will reset to 0
+    if ( dice === 6 && lastDice === 6){
+        scores [activePlayer] = 0
+        document.getElementById(`score-${activePlayer}`).textContent = '0';
+        nextPlayer();
+    }
+    else if (dice !== 1){
         roundScore += dice;
         document.querySelector(`#current-${activePlayer}`).textContent = roundScore;
     }
     else{
         // next player
         nextPlayer();
+        
     }
+    
+    lastDice = dice;
 }
         
 
@@ -56,8 +65,18 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
 
     }
 
+    let input = document.querySelector('.winning-score').value;
+    let winningScore;
+
+    if(input){
+        winningScore = input;
+    } 
+    else{
+        winningScore = 100;
+    }
+
     //check if player has won the game
-    if(scores[activePlayer] >= 100){
+    if(scores[activePlayer] >= winningScore){
         document.querySelector(`#name-${activePlayer}`).textContent = 'Winner!';
         document.querySelector('.dice').style.display = 'none';
         document.querySelector(`.player-${activePlayer}-panel`).classList.add('winner');
