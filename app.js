@@ -12,7 +12,10 @@ GAME RULES:
 ///======================== my code starts here ==============================///
 
 /// declared my variables here
-let scores, roundScore, activePlayer, dice, gamePlaying, lastDice;
+let scores, roundScore, activePlayer, gamePlaying, dice1, dice2;
+
+let diceDom1 = document.getElementById('dice-1');
+let diceDom2 = document.getElementById('dice-2');
 
 initialize();
 
@@ -22,31 +25,29 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
     // 1. random number
     if(gamePlaying){
 
-    dice = Math.floor(Math.random() * 6) + 1;
+    dice1 = Math.floor(Math.random() * 6) + 1;
+    dice2 = Math.floor(Math.random() * 6) + 1;
 
     // 2. display
-    let diceDom =  document.querySelector('.dice');
-    diceDom.style.display = 'block';
-    diceDom.src = `dice-${dice}.png`;
+    // diceDom1 = document.getElementById('dice-1');
+    // diceDom2 = document.getElementById('dice-2');
+    diceDom1.style.display = 'block';
+    diceDom2.style.display = 'block';
+    
+    diceDom1.src = `dice-${dice1}.png`;
+    diceDom2.src = `dice-${dice2}.png`;
+
 
     // 3. update the round score if the number was NOT 1
-    // also if you roll a 6 twice your global will reset to 0
-    if ( dice === 6 && lastDice === 6){
-        scores [activePlayer] = 0
-        document.getElementById(`score-${activePlayer}`).textContent = '0';
-        nextPlayer();
-    }
-    else if (dice !== 1){
-        roundScore += dice;
+    if (dice1 !== 1 && dice2 !==1){
+        roundScore += dice1 + dice2;
         document.querySelector(`#current-${activePlayer}`).textContent = roundScore;
     }
     else{
         // next player
         nextPlayer();
         
-    }
-    
-    lastDice = dice;
+    }  
 }
         
 
@@ -78,7 +79,8 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
     //check if player has won the game
     if(scores[activePlayer] >= winningScore){
         document.querySelector(`#name-${activePlayer}`).textContent = 'Winner!';
-        document.querySelector('.dice').style.display = 'none';
+        diceDom1 .style.display = 'none';
+        diceDom2.style.display = 'none';
         document.querySelector(`.player-${activePlayer}-panel`).classList.add('winner');
         document.querySelector(`.player-${activePlayer}-panel`).classList.remove('active');
         gamePlaying = false;
@@ -108,7 +110,8 @@ function nextPlayer () {
         document.querySelector(`.player-1-panel`).classList.toggle('active');
 
         // hide the dice during the next player's turn
-        document.querySelector('.dice').style.display = 'none';
+      diceDom1.style.display = 'none';
+      diceDom2.style.display = 'none';
 
 } // end of nextPlayer function
 
@@ -123,7 +126,9 @@ function initialize () {
     activePlayer = 0;
     gamePlaying = true;
 
-    document.querySelector('.dice').style.display = 'none';
+    diceDom1.style.display = 'none';
+    diceDom2.style.display = 'none';
+   
 
     document.getElementById('score-0').textContent = 0;
     document.getElementById('score-1').textContent = 0;
